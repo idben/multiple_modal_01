@@ -8,9 +8,14 @@
   </head>
   <body>
     <div class="container">
+      <h1>JavaScript 開啟 Modal 的方法</h1>
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-primary btn-open">
-        111
+        開啟 Modal
+      </button>
+
+      <button type="button" class="btn btn-primary btn-open2">
+        動態改變 Modal 內容
       </button>
 
       <!-- Modal -->
@@ -22,7 +27,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              ...
+              第 1 個 Modal
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -40,7 +45,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              222
+              第 2 個 Modal
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -49,18 +54,35 @@
           </div>
         </div>
       </div>
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" text=""></button>
+            </div>
+            <div class="modal-body">
+              第 2 個 Modal
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" text="Close">Close</button>
+              <button type="button" class="btn btn-primary" text="Save changes">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
       const btnOpen = document.querySelector(".btn-open");
+      const btnOpen2 = document.querySelector(".btn-open2");
       const myModal = new bootstrap.Modal('#exampleModal');
-      const myModalDiv = document.querySelector("#exampleModal");
       const myModal2 = new bootstrap.Modal('#exampleModal2');
-
-
-      // myModal.show()
-
-      console.log(myModal);
+      const myModal3 = new bootstrap.Modal('#exampleModal3');
+      const myModal3Body = document.querySelector('#exampleModal3 .modal-body');
+      const myModalDiv = document.querySelector("#exampleModal");
+      const myModalDiv3 = document.querySelector("#exampleModal3");
 
       myModalDiv.addEventListener('hidden.bs.modal', event => {
         myModal2.show();
@@ -69,6 +91,43 @@
       btnOpen.addEventListener("click", () =>{
         myModal.show();
       });
+
+      btnOpen2.addEventListener("click", () =>{
+        showModal(1)
+      });
+
+
+      function showModal(type) {
+        const btns = myModalDiv3.querySelectorAll("button");
+        btns.forEach(btn => {
+          let classList = btn.classList;
+          btn.classList.remove(classList[2]);
+          btn.innerHTML = btn.getAttribute("text");
+        });
+        let content = "";
+        switch(type){
+          case 1:
+            content = `<div>這是第一個 Modal</div>`;
+            btns[0].classList.add("d-none");
+            btns[2].classList.add("d-none");
+            btns[1].classList.add("btn-success");
+            btns[1].innerHTML = "我知道了";
+            myModalDiv3.addEventListener('hidden.bs.modal', _fun = (event) => {
+              showModal(2);
+              myModalDiv3.removeEventListener('hidden.bs.modal', _fun);
+            })
+            break;
+          case 2:
+            content = `<div>成功關掉第一個然後開第二個</div>`;
+            btns[0].classList.add("d-none");
+            btns[2].classList.add("d-none");
+            btns[1].classList.add("btn-danger");
+            btns[1].innerHTML = "關掉";
+            break;
+        }
+        myModal3Body.innerHTML = content;
+        myModal3.show();
+      }
 
     </script>
   </body>
